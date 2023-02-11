@@ -5,7 +5,7 @@ const router = express.Router();
 // backend/routes/index.js
 // ...
 const apiRouter = require('./api');
-
+console.log("AAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 router.use('/api', apiRouter);
 // ...
 
