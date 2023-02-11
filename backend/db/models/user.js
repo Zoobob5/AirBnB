@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     validatePassword(password) {
       return bcrypt.compareSync(password, this.hashedPassword.toString());
     }
-    
+
     static getCurrentUserById(id) {
       return User.scope("currentUser").findByPk(id);
     };
@@ -44,9 +44,11 @@ module.exports = (sequelize, DataTypes) => {
 
     }
 
-    static async signup({ username, email, password }) {
+    static async signup({ firstName, lastName, username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
+        firstName,
+        lastName,
         username,
         email,
         hashedPassword
@@ -65,6 +67,15 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       username:{
         type: DataTypes.STRING,
         allowNull: false,
