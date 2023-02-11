@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       return { id, username, email };
     };
 
+    validatePassword(password) {
+      return bcrypt.compareSync(password, this.hashedPassword.toString());
+    }
+    
     static getCurrentUserById(id) {
       return User.scope("currentUser").findByPk(id);
     };
@@ -36,6 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       if (user && user.validatePassword(password)) {
         return await User.scope('currentUser').findByPk(user.id);
       }
+
+
     }
 
     static async signup({ username, email, password }) {
@@ -86,9 +92,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: [60, 60]
-      },
-      validatePassword(password) {
-        return bcrypt.compareSync(password, this.hashedPassword.toString());
       }
     }
   },
