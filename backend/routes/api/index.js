@@ -17,8 +17,8 @@ router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
 });
 
-router.get('/boot', (req, res) => {
-  res.send("5555555555555555")
-})
+// router.get('/boot', (req, res) => {
+//   res.send("5555555555555555")
+// })
 
 module.exports = router;

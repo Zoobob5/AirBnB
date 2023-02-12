@@ -20,9 +20,9 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send("LLLLLLLLLLLL")
-})
+// app.get('/', (req, res) => {
+//   res.send("LLLLLLLLLLLL")
+// })
 
 // Security Middleware
 if (!isProduction) {

@@ -5,9 +5,9 @@ const apiRouter = require('./api');
 
 router.use('/api', apiRouter);
 
-router.get('/api', (req, res) => {
-  res.send("BVBBBBBBBBBBB")
-})
+// router.get('/api', (req, res) => {
+//   res.send("BVBBBBBBBBBBB")
+// })
 
 router.get("/api/csrf/restore", (req, res) => {
     const csrfToken = req.csrfToken();
