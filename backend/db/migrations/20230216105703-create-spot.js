@@ -71,7 +71,9 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Spots');
+  
+  down: async (queryInterface, Sequelize) => {
+    options.tableName = "Spots";
+    return queryInterface.dropTable(options);
   }
 };
