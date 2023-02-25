@@ -18,43 +18,43 @@ module.exports = (sequelize, DataTypes) => {
     {
     ownerId:{
       type: DataTypes.INTEGER,
-      allowNull:false
+      allowNull: false
     },
     address:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     city:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     state:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     country:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     lat:{
       type: DataTypes.FLOAT,
-      allowNull:false,
+      allowNull: false,
     },
     lng:{
       type: DataTypes.FLOAT,
-      allowNull:false,
+      allowNull: false,
     },
     name:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     description:{
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull: false,
     },
     price:{
       type: DataTypes.DECIMAL(10, 2),
-      allowNull:false,
+      allowNull: false,
     },
   }, {
     sequelize,
