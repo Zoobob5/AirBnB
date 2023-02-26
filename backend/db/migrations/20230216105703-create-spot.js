@@ -63,15 +63,17 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
-  
+
   down: async (queryInterface, Sequelize) => {
     options.tableName = "Spots";
     return queryInterface.dropTable(options);
