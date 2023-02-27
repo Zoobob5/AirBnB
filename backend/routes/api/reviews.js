@@ -8,9 +8,9 @@ const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
-router.get('/current', requireAuth, async(req, res) => {
-    const {}
-})
+// router.get('/current', requireAuth, async(req, res) => {
+//     const {}
+// })
 
 
 module.exports = router;
