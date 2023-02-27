@@ -14,8 +14,8 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     toSafeObject() {
-      const { id, username, email } = this; // context will be the User instance
-      return { id, username, email };
+      const { firstName, lastName, id, username, email } = this; // context will be the User instance
+      return { firstName, lastName, id, username, email };
     };
 
     validatePassword(password) {
@@ -61,7 +61,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      User.hasMany(models.Spot, { foreignKey: 'ownerId' });
+      User.hasMany(models.Review, { foreignKey: 'userId' });
+      User.hasMany(models.Booking, { foreignKey: 'userId' });
     }
   };
 

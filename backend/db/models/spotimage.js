@@ -6,6 +6,14 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class SpotImage extends Model {
+    // static async newImage({url, preview}) {
+    //   const img = await SpotImage.create({
+    //     url,
+    //     preview
+    //   });
+
+    //   return await SpotImage.findByPk(img.id);
+    //}
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -17,14 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   SpotImage.init({
-    spotId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
+    spotId: DataTypes.INTEGER,
 
     preview: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
+      type: DataTypes.BOOLEAN
     },
 
     url: {
