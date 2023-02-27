@@ -39,7 +39,7 @@ const validateLogin = [
 
       await setTokenCookie(res, user);
 
-      return res.json({
+      return res.status(200).json({
         user: user
       });
     }
@@ -51,7 +51,7 @@ router.delete(
     '/',
     (req, res) => {
       res.clearCookie('token');
-      return res.json({ message: 'success' });
+      return res.status(200).json({ message: 'success' });
     }
   );
 
@@ -62,7 +62,7 @@ router.get(
     (req, res) => {
       const { user } = req;
       if (user) {
-        return res.json({
+        return res.status(200).json({
           user: user.toSafeObject()
         });
       } else return res.json({user: null});
