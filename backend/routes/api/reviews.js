@@ -15,18 +15,19 @@ router.get(
 '/current',
  requireAuth,
  async(req, res) => {
-    let reviews = []
+    let reviews = [];
     reviews = await Review.findAll({
-        attributes: [
-            'id',
-            'userId',
-            'spotId',
-            'review',
-            'stars',
-            'createdAt',
-            'updatedAt'
-        ],
-        includes: [
+        attributes: {
+            includes:[
+                'id',
+                'userId',
+                'spotId',
+                'review',
+                'stars',
+                'createdAt',
+                'updatedAt'
+       ] },
+        include: [
             {model: User},
             {model: Spot},
             {model: ReviewImage}
@@ -89,7 +90,7 @@ router.put('/:reviewId',requireAuth, async(req, res) => {
     await rev.destroy();
      return res.status(200).json({message: "Successfully deleted", statusCode: 200})
     }
-  })
+  });
 
 
 module.exports = router;

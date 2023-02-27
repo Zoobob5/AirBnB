@@ -5,6 +5,7 @@ const { SpotImage } = require('../../db/models');
 const { check } = require('express-validator');
 const { Review } = require('../../db/models');
 const { ReviewImage } = require('../../db/models');
+const { Booking } = require('../../db/models')
 
 
 const { handleValidationErrors } = require('../../utils/validation');
@@ -65,6 +66,7 @@ check('review')
 ]
 
 // GETTING all spots
+
 router.get(
     '/',
     async (req, res) => {
@@ -82,10 +84,49 @@ router.get(
           "lng",
           "name",
           "description",
-          "price"
+          "price",
+          'createdAt',
+          'updatedAt',
       ]});
-      return res.json(spots);
 
+      let sum = [];
+      for (let i = 0; i < spots.length; i++) {
+        const spot = spots[i];
+
+        const prevImg = await SpotImage.findOne({
+            where: { spotId: spot.id, preview: true }
+        });
+
+        if (prevImg) {
+            spot.dataValues.preview = prevImg.url;
+        }
+
+        const whole = await Review.findAll({
+            where: { spotId: spot.id }
+        });
+
+        if (whole.length) {
+
+
+            whole.forEach((rate, k) => {
+
+              sum[k] = 0;
+                sum[k] = sum[k] + rate.stars;
+
+            });
+
+
+        } else {
+            spot.dataValues.avgRating = null;
+        }
+        let avg = sum[i] / 1
+
+        spot.dataValues.avgRating = avg;
+
+
+    }
+//, page, size
+    return res.json({spots});
 
   });
 
@@ -107,23 +148,64 @@ router.get(
           "lng",
           "name",
           "description",
-          "price"
+          "price",
+          'createdAt',
+          'updatedAt'
       ]});
-      return res.json(spots);
+
+      let sum = [];
+      for (let i = 0; i < spots.length; i++) {
+        const spot = spots[i];
+
+        const prevImg = await SpotImage.findOne({
+            where: { spotId: spot.id, preview: true }
+        });
+
+        if (prevImg) {
+            spot.dataValues.preview = prevImg.url;
+        }
+
+        const whole = await Review.findAll({
+            where: { spotId: spot.id }
+        });
+
+        if (whole.length) {
+
+
+            whole.forEach((rate, k) => {
+
+              sum[k] = 0;
+                sum[k] = sum[k] + rate.stars;
+
+            });
+
+
+        } else {
+            spot.dataValues.avgRating = null;
+        }
+        let avg = sum[i] / 1
+
+        spot.dataValues.avgRating = avg;
+
+
+    }
+//, page, size
+    return res.json({spots});;
     });
 
   router.get('/:spotId', async(req, res) => {
     const spotty = await Spot.findByPk(
 
       req.params.spotId,
-      {includes: [
-        { model: User},
-        {model: SpotImage}
+      {include: [
+        { model: User, attributes: ['id', 'firstName', 'lastName']},
+        {model: SpotImage, attributes: ['id', 'url', 'preview']}
       ]}
     )
+    console.log(spotty);
       if(!spotty){
         return res.status(404).json({
-          moessage: "Spot couldn't be found",
+          message: "Spot couldn't be found",
           statusCode: 404
         })
       }
@@ -132,7 +214,7 @@ router.get(
 
   router.post('/', requireAuth, validateSpots, async(req, res) => {
     const {address, city, state, country, lat, lng, name, description, price} = req.body;
-    const place = await Spot.create({address, city, state, country, lat, lng, name, description, price, ownerId:req.user.id});
+    const place = await Spot.create({ownerId:req.user.id, address, city, state, country, lat, lng, name, description, price });
 
     return res.status(201).json(place);
   });
@@ -215,7 +297,7 @@ router.get(
             'stars'
             ]
         },
-        includes: [
+        include: [
             {model: User},
             {model: ReviewImage}
         ]
@@ -249,7 +331,8 @@ router.get(
           });
 
           if(reviewer)return res.status(403).json({ message: 'User already has a review for this spot', statusCode: 403 });
-          return res.status(200).json(rev);
+
+          return res.status(201).json({rev});
       });
 
 
