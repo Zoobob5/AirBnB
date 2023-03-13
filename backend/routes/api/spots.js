@@ -371,7 +371,7 @@ router.get(
 
 
         });
-        
+
         return res.status(200).json(reviews);
       }
 
@@ -399,9 +399,9 @@ router.get(
             userId: req.user.id,
             spotId: req.params.spotId,
           });
-
+        
           if(reviewer) return res.status(403).json({ message: 'User already has a review for this spot', statusCode: 403 });
-          console.log(reviewer)
+
           return res.status(201).json({Booking: rev});
       });
 
