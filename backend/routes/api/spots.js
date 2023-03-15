@@ -73,8 +73,13 @@ router.get(
     async (req, res) => {
 
       let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-      page = Number(page);
-      size = Number(size);
+
+      if(page){page = Number(page);}
+      else {page = 1};
+
+      if(size){size = Number(size);}
+      else{size = null};
+
 
       const spots = await Spot.findAll({
         limit: size,
@@ -406,7 +411,7 @@ router.get(
 
           if(reviewer) return res.status(403).json({ message: 'User already has a review for this spot', statusCode: 403 });
 
-          return res.status(201).json({Booking: rev});
+          return res.status(201).json({Review: rev});
       });
 
 //Get all Bookings for a Spot based on the Spot's id
