@@ -45,7 +45,7 @@ module.exports = {
         lng: 0,
         name: 'Space Station Xtf-1384',
         description: 'If you got enough money you can expierence living in outer space with the wonderfull view of eiter the pitch black void or the occassional blinding star we call sun. ',
-        price: 15000000000.99
+        price: 150000.99
       }
 
    ], {});
