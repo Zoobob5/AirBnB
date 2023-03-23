@@ -101,17 +101,54 @@ router.get(
           ],
        include: [
         {
-            model: Review,
-            attributes: ['review', 'stars']
-        },
-        {
           model: SpotImage,
           attributes: ['preview']
         }
     ]
 });
+const sList = [];
+spots.forEach(part => {
+    sList.push(part.toJSON());
+});
+for await (let spot of sList) {
 
-  res.json({ spots, page, size });
+  delete spot.Reviews
+
+  spot.SpotImages.forEach(images => {
+      if (images.preview === true) {
+          spot.previewImage = images.url
+      }
+  })
+
+  if (!spot.previewImage) {
+      spot.previewImage = 'N/A'
+  }
+  // avgRating
+  const reviews = await Review.findAll({
+      where: {
+          spotId: spot.id
+      }
+  })
+  let count = 0
+  for await (let rev of reviews) {
+    console.log(reviews)
+      count += Number(rev.dataValues.stars);
+  }
+
+
+  const avg = count / reviews.length;
+
+  spot.avgRating = avg;
+  if (!spot.avgRating) {
+      spot.avgRating = 'N/A'
+  }
+  delete spot.SpotImages
+}
+// res.json({
+// Spots: sList
+// })
+
+  res.json({ Spots: sList, page, size });
 
   });
 
@@ -141,10 +178,6 @@ router.get(
           'updatedAt',
         ],
         include: [
-            {
-                model: Review,
-                attributes: ['review', 'stars']
-            },
             {
               model: SpotImage,
               attributes: ['preview']
@@ -176,8 +209,11 @@ router.get(
       })
       let count = 0
       for await (let rev of reviews) {
-          count += Number(rev.stars);
+
+          count += Number(rev.dataValues.stars);
       }
+
+      console.log(reviews.length)
       const avg = count / reviews.length;
 
       spot.avgRating = avg;
@@ -228,7 +264,7 @@ router.get(
 
       // ]});
 
-      let sum = [];
+      //let sum = [];
     //   for (let i = 0; i < takenSpots.length; i++) {
     //     const spot = takenSpots[i];
 
@@ -344,6 +380,7 @@ router.get(
    return res.status(200).json(spot)
   });
 
+//Delete spot
     router.delete('/:spotId', async(req,res) => {
       const spot = await Spot.findByPk(req.params.spotId);
 
@@ -356,6 +393,7 @@ router.get(
       }
     })
 
+    //GET reviews by spotID
     router.get(
       '/:spotId/reviews',
       async(req, res) => {
@@ -374,14 +412,30 @@ router.get(
             ]
         },
         include: [
-            {model: User},
-            {model: ReviewImage}
+            {model: User,
+              attributes: {
+                exclude: [
+                  "username",
+                  "email",
+                  "hashedPassword",
+                  "createdAt",
+                  "updatedAt"
+                ]
+              }},
+            {model: ReviewImage,
+            attributes: {
+              exclude: [
+                "reviewId",
+                "createdAt",
+                "updatedAt"
+              ]
+            }}
         ]
 
 
         });
 
-        return res.status(200).json(reviews);
+        return res.status(200).json({Reviews: reviews});
       }
 
       else{
@@ -401,6 +455,8 @@ router.get(
 
 
         let reviewer = await Review.findOne({where: {userId: req.user.id, spotId: req.params.spotId,}});
+        if(reviewer) return res.status(403).json({ message: 'User already has a review for this spot', statusCode: 403 });
+
         const {review, stars} = req.body;
           const rev = await Review.create({
             review,
@@ -408,8 +464,6 @@ router.get(
             userId: req.user.id,
             spotId: req.params.spotId,
           });
-
-          if(reviewer) return res.status(403).json({ message: 'User already has a review for this spot', statusCode: 403 });
 
           return res.status(201).json({Review: rev});
       });
@@ -503,7 +557,7 @@ router.get(
             endDate: endDate
           });
 
-          return res.status(201).json({ Booking: booking });
+          return res.status(201).json( booking );
         });
 
 module.exports = router;

@@ -4,7 +4,8 @@ const {User} = require('../../db/models')
 const { Spot } = require('../../db/models');
 const { check } = require('express-validator');
 const {ReviewImage} = require('../../db/models');
-const {Review} = require('../../db/models')
+const {Review} = require('../../db/models');
+const {SpotImage} = require('../../db/models');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
@@ -32,13 +33,35 @@ router.get(
                 'updatedAt'
        ] },
         include: [
-            {model: User},
-            {model: Spot},
-            {model: ReviewImage}
+            {model: User,
+              attributes: {
+                exclude: [
+                  "username",
+                  "email",
+                  "hashedPassword",
+                  "createdAt",
+                  "updatedAt"
+                ]
+              }},
+            {model: Spot,
+              attributes: {
+                exclude: [
+                  "createdAt",
+                  "updatedAt"
+                ]
+              }},
+            {model: ReviewImage,
+              attributes: {
+                exclude: [
+                  "reviewId",
+                  "createdAt",
+                  "updatedAt"
+                ]
+              }}
         ]
     });
 
-    return res.status(200).json(reviews);
+    return res.status(200).json({Reviews:reviews});
 });
 
 // add image

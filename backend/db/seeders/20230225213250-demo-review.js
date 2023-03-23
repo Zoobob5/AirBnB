@@ -19,15 +19,15 @@ module.exports = {
       },
 
       {
-        userId: 1,
-        spotId: 1,
+        userId: 2,
+        spotId: 2,
         review: 'Looks nice but the smell is conflicting with all the flavours around here and there is no bathroom or sink.',
         stars: 3,
       },
 
       {
-        userId: 1,
-        spotId: 1,
+        userId: 3,
+        spotId: 3,
         review: 'Very nice get away and super afforable, the view is breathtaking but it is very quiet.',
         stars: 4,
       }

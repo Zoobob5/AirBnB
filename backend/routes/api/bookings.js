@@ -19,10 +19,19 @@ router.get(
                 'spotId',
                 'userId',
                 'startDate',
-                'endDate'
+                'endDate',
+                "createdAt",
+                "updatedAt"
             ],
-            includes: [
-                {model: Spot}
+            include: [
+            {model: Spot,
+                attributes: {
+                    exclude: [
+                        "description",
+                        "createdAt",
+                        "updatedAt"
+                        ]
+                      }}
             ]
         });
 
