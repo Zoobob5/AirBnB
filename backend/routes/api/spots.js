@@ -465,7 +465,7 @@ for await (let spot of sList) {
             spotId: req.params.spotId,
           });
 
-          return res.status(201).json({Review: rev});
+          return res.status(201).json(rev);
       });
 
 //Get all Bookings for a Spot based on the Spot's id
