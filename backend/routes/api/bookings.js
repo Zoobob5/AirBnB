@@ -35,12 +35,12 @@ router.get(
             ]
         });
 
-        return res.status(200).json(books);
+        return res.status(200).json({Bookings:books});
     });
 
     //Edit a Booking
 
-    router.put('/:bookingId',requireAuth, async(req, res) => {
+    router.put('/:bookingId', requireAuth, async(req, res) => {
         const curUser = req.user.id;
         const booked = await Booking.findByPk(req.params.bookingId);
 
@@ -54,8 +54,10 @@ router.get(
             booked.endDate = endDate;
 
         await booked.save();
-        return res.status(200).json(booked)
+
         }
+
+        return res.status(200).json(booked)
       });
 
       //delete review

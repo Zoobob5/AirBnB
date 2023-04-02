@@ -201,6 +201,7 @@ for await (let spot of sList) {
       if (!spot.previewImage) {
           spot.previewImage = 'N/A'
       }
+
       // avgRating
       const reviews = await Review.findAll({
           where: {
@@ -354,6 +355,7 @@ for await (let spot of sList) {
     return res.status(201).json(rObj);
   });
 
+// Edit Spot
   router.put('/:spotId',requireAuth, async(req, res) => {
     const spot = await Spot.findByPk(req.params.spotId);
 
@@ -482,13 +484,24 @@ for await (let spot of sList) {
 
               return res.status(404).json({ message: "Spot couldn't be found", statusCode: 404 });
             }
-
+           
           if(spotty.ownerId === req.user.id){
             book = await Booking.findAll({
             where: {spotId: spotty.id},
             include: [
               {model: User,
-              attributes:{},},
+              attributes:{
+                exclude: [
+                  'hashedPassword',
+                  "email",
+                  "username",
+                  "createdAt",
+                  "updatedAt"
+
+
+                ]
+              },
+            },
           ],
             attributes: {
               include: [
@@ -503,6 +516,7 @@ for await (let spot of sList) {
           }
 
           });
+
           return res.status(200).json({Booking: book});
           }
 
